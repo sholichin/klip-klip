@@ -1,0 +1,236 @@
+/* KLIP KLIP — Modern Creator Tech Styling */
+:root {
+  --bg-primary: #0a0d14;
+  --bg-secondary: #111726;
+  --bg-card: #162035;
+  --bg-card-hover: #1c2944;
+  --border-color: #243452;
+  --border-glow: rgba(245, 158, 11, 0.3);
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --brand-yellow: #f59e0b;
+  --brand-yellow-light: #fef3c7;
+  --brand-neon: #10b981;
+  --brand-violet: #8b5cf6;
+  --brand-red: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334970;
+}
+
+/* Glow effects */
+.glow-yellow {
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+}
+.glow-purple {
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+/* Smartphone Mockup */
+.phone-mockup {
+  width: 320px;
+  height: 570px;
+  background: #000;
+  border-radius: 40px;
+  border: 10px solid #222d42;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.15);
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 24px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 40;
+  border: 1px solid #1a2233;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #080b12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Live Hook Banner Simulation */
+.sim-hook-banner {
+  position: absolute;
+  top: 48px;
+  left: 14px;
+  right: 14px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: center;
+  z-index: 30;
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.sim-hook-banner.badge_yellow {
+  background: #ffd60a;
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.sim-hook-banner.badge_red {
+  background: #dc2626;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.sim-hook-banner.neon {
+  background: #0f172a;
+  color: #38bdf8;
+  border: 1px solid #0284c7;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.sim-hook-banner.clean {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.preview-split-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50%;
+  object-fit: cover;
+  object-position: 20% center;
+  border-bottom: 2px solid #243452;
+  z-index: 10;
+}
+
+.preview-split-bot {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
+  object-fit: cover;
+  object-position: 80% center;
+  z-index: 10;
+}
+
+/* Live Subtitle Simulation */
+.sim-subtitle {
+  position: absolute;
+  bottom: 85px;
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 3px 6px rgba(0,0,0,0.9);
+  z-index: 30;
+  line-height: 1.3;
+}
+
+.sim-subtitle span.highlight {
+  color: #ffd60a;
+}
+.sim-subtitle.green span.highlight {
+  color: #10b981;
+}
+.sim-subtitle.cyan span.highlight {
+  color: #06b6d4;
+}
+
+/* Watermark */
+.sim-watermark {
+  position: absolute;
+  bottom: 30px;
+  right: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: 30;
+}
+
+/* Video Canvas Simulated Layouts */
+.preview-bg-blur {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(14px) brightness(0.6);
+  transform: scale(1.15);
+}
+
+.preview-fg-center {
+  position: absolute;
+  width: 100%;
+  max-height: 56.25%;
+  object-fit: contain;
+  z-index: 10;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+}
+
+.preview-fg-crop {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5)); }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.5s infinite;
+}

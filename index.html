@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KLIP KLIP — AI Viral YouTube Clipping & Monetization Studio</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              yellow: '#F59E0B',
+              yellowLight: '#FEF3C7',
+              dark: '#0A0D14',
+              surface: '#111726',
+              card: '#162035',
+              border: '#243452',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#0A0D14] text-slate-100 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <header class="border-b border-[#243452] bg-[#0E1424]/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-black text-xl shadow-lg shadow-amber-500/30">
+          ⚡
+        </div>
+        <div>
+          <span class="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-yellow-200 to-amber-500">
+            KLIP KLIP
+          </span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
+            MONETIZATION STUDIO
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Status Badges -->
+        <div id="statusGemini" class="flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs bg-slate-800 border border-slate-700 text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="geminiStatusText">Memeriksa AI...</span>
+        </div>
+
+        <div id="statusFFmpeg" class="hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>FFmpeg 9:16 Ready</span>
+        </div>
+
+        <!-- Settings Button -->
+        <button id="btnOpenSettings" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700 transition">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Hero / Input Section -->
+    <section class="bg-gradient-to-b from-[#141C30] to-[#0E1526] p-6 sm:p-8 rounded-3xl border border-[#243452] shadow-2xl relative overflow-hidden">
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-6">
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          Automasi Klip YouTube Jadi <span class="text-amber-400">Shorts Viral</span> Siap Cuan
+        </h1>
+        <p class="text-sm sm:text-base text-slate-400">
+          Dapatkan video vertikal 9:16 dengan hook viral, subtitle kata-per-kata otomatis, dan skor kelayakan monetisasi untuk <strong class="text-slate-200">MotionKlip</strong>, <strong class="text-slate-200">KlipReward</strong>, TikTok, dan Shorts.
+        </p>
+      </div>
+
+      <!-- URL Input Box -->
+      <div class="max-w-3xl mx-auto space-y-4">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+              <i data-lucide="youtube" class="w-6 h-6 text-red-500"></i>
+            </div>
+            <input 
+              type="text" 
+              id="inputYoutubeUrl" 
+              placeholder="Tempel tautan video YouTube (misal: podcast, wawancara, seminar)..." 
+              class="w-full pl-12 pr-4 py-3.5 bg-[#090D18] border border-[#283A5D] rounded-2xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 text-sm sm:text-base transition"
+            >
+          </div>
+          <button 
+            id="btnAnalyze" 
+            class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-extrabold text-sm sm:text-base flex items-center justify-center space-x-2 shadow-lg shadow-amber-500/20 active:scale-95 transition"
+          >
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span>Cari Klip Viral</span>
+          </button>
+        </div>
+
+        <!-- Sample URLs -->
+        <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-1">
+          <span>Contoh video:</span>
+          <button class="btn-sample px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60" data-url="https://www.youtube.com/watch?v=kXYiU_JCYtU">
+            🎙️ Linkin Park - Numb
+          </button>
+          <button class="btn-sample px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+            🔥 Sample Music
+          </button>
+          <button class="btn-sample px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60" data-url="https://www.youtube.com/watch?v=jNQXAC9IVRw">
+            📹 Me at the zoo (Short)
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State Overlay -->
+      <div id="loadingOverlay" class="hidden absolute inset-0 bg-[#0A0D14]/90 backdrop-blur-sm flex flex-col items-center justify-center z-40 space-y-4">
+        <div class="w-14 h-14 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+        <div class="text-center space-y-1">
+          <p id="loadingTitle" class="text-lg font-bold text-amber-400">Sedang Menganalisis Video...</p>
+          <p id="loadingSubtitle" class="text-xs text-slate-400">Mengekstrak transkrip & mencari puncak emosional dan hook viral</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Metadata Info Bar (Hidden by default) -->
+    <section id="metadataSection" class="hidden bg-[#12192A] p-4 sm:p-5 rounded-2xl border border-[#243452] flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-4 w-full md:w-auto">
+        <img id="metaThumb" src="" alt="Thumbnail" class="w-24 h-16 rounded-xl object-cover border border-slate-700 flex-shrink-0">
+        <div class="min-w-0">
+          <h3 id="metaTitle" class="text-base font-bold truncate text-slate-100">Judul Video</h3>
+          <p id="metaChannel" class="text-xs text-slate-400">Channel Creator</p>
+          <div class="flex items-center space-x-2 mt-1 text-[11px] text-slate-400">
+            <span id="metaDuration" class="px-2 py-0.5 rounded bg-slate-800">⏱ 00:00</span>
+            <span id="metaTranscript" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">✓ Transkrip Tersedia</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 text-xs">
+        <span class="text-slate-400">Total Klip Ditemukan:</span>
+        <span id="metaClipCount" class="font-extrabold text-amber-400 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30">0 Klip</span>
+      </div>
+    </section>
+
+    <!-- Studio Workspace (Hidden until clips generated) -->
+    <section id="studioSection" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Left Column: Clips Feed (7 Cols) -->
+      <div class="lg:col-span-7 space-y-4">
+        <div class="flex items-center justify-between pb-2">
+          <h2 class="text-lg font-extrabold flex items-center space-x-2">
+            <span>🔥 Klip Pilihan AI</span>
+            <span class="text-xs font-normal text-slate-400">(Urutan Virality Tertinggi)</span>
+          </h2>
+          <span class="text-xs text-amber-400">Pilih klip untuk kustomisasi</span>
+        </div>
+
+        <div id="clipsFeedContainer" class="space-y-4 max-h-[820px] overflow-y-auto pr-1">
+          <!-- Clip Cards will be injected here dynamically -->
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive 9:16 Smartphone Studio (5 Cols) -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="sticky top-20 bg-[#12192A] p-6 rounded-3xl border border-[#243452] shadow-2xl space-y-6">
+          
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-extrabold text-sm uppercase tracking-wider text-slate-200 flex items-center space-x-2">
+              <i data-lucide="smartphone" class="w-4 h-4 text-amber-400"></i>
+              <span>Live Preview Simulator 9:16</span>
+            </h3>
+            <span id="activeClipIndicator" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold">Klip #1</span>
+          </div>
+
+          <!-- Phone Simulator Box -->
+          <div class="phone-mockup">
+            <div class="phone-notch"></div>
+            <div class="phone-screen" id="phoneScreen">
+              <!-- Blurred Background Image / Video -->
+              <img id="simBgImage" src="" alt="Background" class="preview-bg-blur">
+              <!-- Foreground Centered or Cropped -->
+              <img id="simFgImage" src="" alt="Foreground" class="preview-fg-center">
+
+              <!-- Live Hook Banner Overlay -->
+              <div id="simHookBanner" class="sim-hook-banner badge_yellow">
+                <div id="simHookText">JANGAN LAKUKAN INI SEBELUM TERLAMBAT! 😱</div>
+              </div>
+
+              <!-- Live Subtitle Overlay -->
+              <div id="simSubtitle" class="sim-subtitle">
+                <span id="simSubLine">RAHASIA INI AKHIRNYA <span class="highlight">TERBONGKAR</span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customizer Controls -->
+          <div class="space-y-4 pt-2">
+            <!-- Toggle Show Hook -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-[#090D18] border border-slate-800">
+              <span class="text-xs font-bold text-slate-300 flex items-center space-x-1.5">
+                <i data-lucide="type" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>Tampilkan Headline Hook:</span>
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="toggleShowHook" checked class="sr-only peer">
+                <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+              </label>
+            </div>
+
+            <!-- Edit Hook Text -->
+            <div id="hookTextInputGroup" class="space-y-1.5">
+              <label class="text-xs font-bold text-slate-300 flex items-center justify-between">
+                <span>Teks Headline Hook:</span>
+                <span class="text-[10px] text-amber-400">Real-time update</span>
+              </label>
+              <input 
+                type="text" 
+                id="editHookText" 
+                class="w-full px-3 py-2 bg-[#090D18] border border-[#283A5D] rounded-xl text-xs font-bold text-slate-100 uppercase focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20"
+                placeholder="Tulis headline hook yang menohok..."
+              >
+            </div>
+
+            <!-- Layout Selector -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-slate-300">Format Layout Video:</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btnLayoutBlur" class="btn-layout px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 border border-amber-400 text-amber-300 flex items-center justify-center space-x-1.5" data-layout="blurred_bg">
+                  <span>📻 Blurred BG (Podcast)</span>
+                </button>
+                <button id="btnLayoutCrop" class="btn-layout px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 border border-slate-700 text-slate-400 hover:text-slate-200 flex items-center justify-center space-x-1.5" data-layout="crop_center">
+                  <span>📱 Speaker Crop (Fokus)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Speaker Focus Controls (Fokus Pembicara) -->
+            <div id="speakerFocusGroup" class="space-y-2 p-3 rounded-2xl bg-[#090D18] border border-slate-800">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-slate-200 flex items-center space-x-1.5">
+                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Arah Kamera / Pembicara:</span>
+                </label>
+                <span id="speakerPositionLabel" class="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded">Tengah (50%)</span>
+              </div>
+              <div class="grid grid-cols-4 gap-1.5 text-[11px] font-bold">
+                <button type="button" class="btn-speaker px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center transition" data-speaker="left">
+                  👤 Kiri
+                </button>
+                <button type="button" class="btn-speaker px-2 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-400 text-center transition" data-speaker="center">
+                  🎯 Tengah
+                </button>
+                <button type="button" class="btn-speaker px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center transition" data-speaker="right">
+                  👤 Kanan
+                </button>
+                <button type="button" class="btn-speaker px-2 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center transition" data-speaker="split">
+                  👥 Split 2
+                </button>
+              </div>
+              <div class="pt-1">
+                <input 
+                  type="range" 
+                  id="sliderSpeakerFocus" 
+                  min="0" 
+                  max="100" 
+                  value="50" 
+                  class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                >
+                <div class="flex justify-between text-[9px] text-slate-500 pt-0.5 font-medium">
+                  <span>← Tamu (Kiri)</span>
+                  <span>Tengah (Solo)</span>
+                  <span>Host (Kanan) →</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hook Style Selector -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-slate-300">Gaya Banner Hook:</label>
+              <div class="grid grid-cols-3 gap-2 text-[11px] font-bold">
+                <button class="btn-hook-style p-2 rounded-xl bg-amber-500 text-black border-2 border-white shadow" data-style="badge_yellow">
+                  Kuning Viral
+                </button>
+                <button class="btn-hook-style p-2 rounded-xl bg-red-600 text-white border border-transparent" data-style="badge_red">
+                  Merah Alert
+                </button>
+                <button class="btn-hook-style p-2 rounded-xl bg-slate-900 text-sky-400 border border-sky-500" data-style="neon">
+                  Cyber Neon
+                </button>
+              </div>
+            </div>
+
+            <!-- Subtitle Color Selector -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-slate-300">Highlight Subtitle:</label>
+              <div class="grid grid-cols-3 gap-2 text-[11px] font-bold">
+                <button class="btn-sub-style p-2 rounded-xl bg-slate-800 text-amber-400 border border-amber-500/40" data-sub="karaoke_yellow">
+                  🟡 Kuning
+                </button>
+                <button class="btn-sub-style p-2 rounded-xl bg-slate-800 text-emerald-400 border border-slate-700" data-sub="karaoke_green">
+                  🟢 Hijau
+                </button>
+                <button class="btn-sub-style p-2 rounded-xl bg-slate-800 text-cyan-400 border border-slate-700" data-sub="karaoke_cyan">
+                  🔵 Cyan
+                </button>
+              </div>
+            </div>
+
+            <!-- Render Button -->
+            <button 
+              id="btnRenderClip" 
+              class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold text-sm sm:text-base flex items-center justify-center space-x-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition"
+            >
+              <i data-lucide="video" class="w-5 h-5"></i>
+              <span>Render Video Vertikal 9:16 (HD)</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Monetization & Export Hub Modal / Card -->
+    <div id="exportModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div class="bg-[#12192A] border border-[#243452] max-w-xl w-full rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <button id="btnCloseExportModal" class="absolute top-5 right-5 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+            <i data-lucide="check-circle" class="w-7 h-7"></i>
+          </div>
+          <h3 class="text-xl font-black text-slate-100">Video Berhasil Dirender!</h3>
+          <p class="text-xs text-slate-400">Siap diputar, diunduh, dan disubmit ke MotionKlip / KlipReward / TikTok / Shorts.</p>
+        </div>
+
+        <!-- Video Player Preview -->
+        <div class="flex justify-center bg-black/60 rounded-2xl p-2 border border-slate-800">
+          <video 
+            id="modalVideoPlayer" 
+            controls 
+            playsinline 
+            class="max-h-64 rounded-xl shadow-2xl object-contain bg-black"
+          ></video>
+        </div>
+
+        <!-- Download Action -->
+        <a 
+          id="btnDownloadVideo" 
+          href="#" 
+          download 
+          class="block w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-extrabold text-center text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition"
+        >
+          ⬇️ Download File MP4 (1080x1920)
+        </a>
+
+        <!-- 1-Click Copy Package for Monetization -->
+        <div class="space-y-3 pt-2">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+            <span>Paket Monetasi & Tagar Viral</span>
+            <span class="text-emerald-400 text-[10px]">1-Click Copy</span>
+          </div>
+
+          <!-- Copy Title -->
+          <div class="p-3 rounded-xl bg-[#090D18] border border-slate-800 flex items-center justify-between gap-2">
+            <div class="truncate text-xs text-slate-300">
+              <span class="text-slate-500 font-bold mr-1">Judul:</span>
+              <span id="copyTitleText">Headline Hook</span>
+            </div>
+            <button class="btn-copy px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-amber-400" data-target="copyTitleText">
+              Salin
+            </button>
+          </div>
+
+          <!-- Copy TikTok Caption -->
+          <div class="p-3 rounded-xl bg-[#090D18] border border-slate-800 flex items-center justify-between gap-2">
+            <div class="truncate text-xs text-slate-300">
+              <span class="text-slate-500 font-bold mr-1">Caption TikTok:</span>
+              <span id="copyCaptionText">Caption memancing komentar...</span>
+            </div>
+            <button class="btn-copy px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-amber-400" data-target="copyCaptionText">
+              Salin
+            </button>
+          </div>
+
+          <!-- Copy MotionKlip Format -->
+          <div class="p-3 rounded-xl bg-[#090D18] border border-slate-800 flex items-center justify-between gap-2">
+            <div class="truncate text-xs text-slate-300">
+              <span class="text-slate-500 font-bold mr-1">Format MotionKlip/KlipReward:</span>
+              <span id="copyRewardText">Format submission...</span>
+            </div>
+            <button class="btn-copy px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-amber-400" data-target="copyRewardText">
+              Salin
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div class="bg-[#12192A] border border-[#243452] max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <button id="btnCloseSettingsModal" class="absolute top-5 right-5 text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-black text-slate-100 flex items-center space-x-2">
+            <i data-lucide="sliders" class="w-5 h-5 text-amber-400"></i>
+            <span>Pengaturan KLIP KLIP</span>
+          </h3>
+          <p class="text-xs text-slate-400">Konfigurasi API AI dan preferensi render otomatis.</p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Gemini API Key -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-300 flex items-center justify-between">
+              <span>Google Gemini API Key:</span>
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-[10px] text-amber-400 hover:underline">Dapatkan API Key Gratis &rarr;</a>
+            </label>
+            <input 
+              type="password" 
+              id="inputGeminiApiKey" 
+              placeholder="Masukkan AIzaSy..." 
+              class="w-full px-3.5 py-2.5 bg-[#090D18] border border-[#283A5D] rounded-xl text-xs text-slate-100 focus:border-amber-400 focus:outline-none"
+            >
+            <p class="text-[10px] text-slate-500">API Key disimpan aman di perangkat lokal Anda. Jika kosong, sistem otomatis memakai mode heuristik offline cerdas.</p>
+          </div>
+
+          <!-- Model selection -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-300">Model Gemini:</label>
+            <select id="selectGeminiModel" class="w-full px-3.5 py-2.5 bg-[#090D18] border border-[#283A5D] rounded-xl text-xs text-slate-200">
+              <option value="gemini-1.5-flash">Gemini 1.5 Flash (Sangat Cepat & Efisien)</option>
+              <option value="gemini-2.0-flash">Gemini 2.0 Flash (Generasi Terbaru)</option>
+            </select>
+          </div>
+
+          <button 
+            id="btnSaveSettings" 
+            class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider transition"
+          >
+            Simpan Pengaturan
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1C273E] bg-[#0A0D14] py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <span class="font-extrabold text-amber-400">⚡ KLIP KLIP</span>
+        <span>— Automasi Klip YouTube untuk Monetasi Kreator</span>
+      </div>
+      <div>
+        <span>Didukung oleh Gemini AI, yt-dlp & FFmpeg 9:16</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/preview.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
